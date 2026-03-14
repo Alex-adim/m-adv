@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Math Adventure! 🌟</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --sky: #87CEEB;
+      --sun: #FFD700;
+      --grass: #7EC850;
+      --cloud: #FFFDE7;
+      --coral: #FF6B6B;
+      --mint: #4ECDC4;
+      --lavender: #C084FC;
+      --peach: #FFB347;
+      --cream: #FFFBF0;
+      --dark: #2D2D2D;
+      --shadow: rgba(0,0,0,0.15);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: linear-gradient(180deg, var(--sky) 0%, #B0E0FF 60%, var(--grass) 60%, #6BBF3C 100%);
+      min-height: 100vh;
+      overflow-x: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* Floating clouds */
+    .cloud {
+      position: fixed;
+      background: white;
+      border-radius: 50px;
+      opacity: 0.85;
+      filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1));
+      animation: drift linear infinite;
+      z-index: 0;
+    }
+    .cloud::before, .cloud::after {
+      content: '';
+      position: absolute;
+      background: white;
+      border-radius: 50%;
+    }
+    .cloud-1 { width: 100px; height: 35px; top: 8%; animation-duration: 30s; animation-delay: 0s; }
+    .cloud-1::before { width: 50px; height: 50px; top: -25px; left: 15px; }
+    .cloud-1::after { width: 35px; height: 35px; top: -15px; left: 45px; }
+    .cloud-2 { width: 140px; height: 45px; top: 18%; animation-duration: 45s; animation-delay: -15s; }
+    .cloud-2::before { width: 65px; height: 65px; top: -35px; left: 20px; }
+    .cloud-2::after { width: 50px; height: 50px; top: -25px; left: 65px; }
+    .cloud-3 { width: 80px; height: 28px; top: 5%; animation-duration: 38s; animation-delay: -20s; }
+    .cloud-3::before { width: 40px; height: 40px; top: -20px; left: 10px; }
+    .cloud-3::after { width: 30px; height: 30px; top: -10px; left: 38px; }
+
+    @keyframes drift {
+      from { transform: translateX(-200px); }
+      to { transform: translateX(110vw); }
+    }
+
+    /* Sun */
+    .sun {
+      position: fixed;
+      top: 20px;
+      right: 60px;
+      width: 70px;
+      height: 70px;
+      background: radial-gradient(circle, #FFE566, #FFD700);
+      border-radius: 50%;
+      box-shadow: 0 0 0 12px rgba(255,215,0,0.3), 0 0 0 24px rgba(255,215,0,0.15);
+      animation: sunPulse 3s ease-in-out infinite;
+      z-index: 0;
+    }
+    @keyframes sunPulse {
+      0%, 100% { box-shadow: 0 0 0 12px rgba(255,215,0,0.3), 0 0 0 24px rgba(255,215,0,0.15); }
+      50% { box-shadow: 0 0 0 18px rgba(255,215,0,0.4), 0 0 0 35px rgba(255,215,0,0.2); }
+    }
+
+    /* Stars in background */
+    .stars {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .star {
+      position: absolute;
+      font-size: 20px;
+      animation: twinkle 2s ease-in-out infinite;
+    }
+
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.2; transform: scale(0.8); }
+      50% { opacity: 0.9; transform: scale(1.2); }
+    }
+
+    /* Main container */
+    .container {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 700px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+    }
+
+    /* Title */
+    .title {
+      font-family: 'Fredoka One', cursive;
+      font-size: clamp(2.2rem, 7vw, 3.5rem);
+      color: white;
+      text-shadow: 3px 3px 0 var(--coral), 5px 5px 0 rgba(0,0,0,0.15);
+      letter-spacing: 2px;
+      text-align: center;
+      margin-top: 10px;
+      animation: titleBounce 2s ease-in-out infinite;
+    }
+    @keyframes titleBounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
+
+    /* Level selector */
+    .level-panel {
+      background: white;
+      border-radius: 24px;
+      padding: 20px 30px;
+      box-shadow: 0 8px 30px var(--shadow), inset 0 1px 0 rgba(255,255,255,0.8);
+      text-align: center;
+      width: 100%;
+      border: 3px solid var(--sun);
+    }
+
+    .level-label {
+      font-family: 'Fredoka One', cursive;
+      font-size: 1.4rem;
+      color: var(--dark);
+      margin-bottom: 14px;
+    }
+
+    .level-buttons {
+      display: flex;
+      gap: 14px;
+      justify-content: center;
+    }
+
+    .level-btn {
+      font-family: 'Fredoka One', cursive;
+      font-size: 1.1rem;
+      padding: 12px 28px;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.2s;
+      border-bottom: 4px solid transparent;
+      color: white;
+    }
+    .level-btn.l1 { background: var(--mint); border-color: #3BB5AE; }
+    .level-btn.l2 { background: var(--lavender); border-color: #A855F7; }
+    .level-btn.active { transform: translateY(2px); border-bottom-width: 2px; filter: brightness(0.95); }
+    .level-btn:hover { transform: translateY(-3px) scale(1.05); }
+    .level-btn.selected { outline: 4px solid var(--sun); outline-offset: 2px; }
+
+    /* Score panel */
+    .score-panel {
+      display: flex;
+      gap: 14px;
+      width: 100%;
+      justify-content: center;
+    }
+
+    .score-card {
+      flex: 1;
+      max-width: 160px;
+      background: white;
+      border-radius: 20px;
+      padding: 12px 16px;
+      text-align: center;
+      box-shadow: 0 6px 20px var(--shadow);
+      border-bottom: 4px solid var(--coral);
+    }
+    .score-card.streak { border-color: var(--sun); }
+    .score-card.total { border-color: var(--mint); }
+
+    .score-label {
+      font-size: 0.75rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #888;
+    }
+    .score-value {
+      font-family: 'Fredoka One', cursive;
+      font-size: 2rem;
+      color: var(--dark);
+      line-height: 1.1;
+    }
+
+    /* Question card */
+    .question-card {
+      background: white;
+      border-radius: 28px;
+      padding: 30px 36px;
+      width: 100%;
+      box-shadow: 0 10px 40px var(--shadow), inset 0 1px 0 rgba(255,255,255,0.9);
+      text-align: center;
+      border: 3px solid transparent;
+      transition: border-color 0.3s, transform 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+    .question-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 6px;
+      background: linear-gradient(90deg, var(--coral), var(--peach), var(--sun), var(--mint), var(--lavender));
+    }
+    .question-card.correct { border-color: var(--mint); animation: correctPop 0.5s ease; }
+    .question-card.wrong { border-color: var(--coral); animation: wrongShake 0.5s ease; }
+
+    @keyframes correctPop {
+      0% { transform: scale(1); }
+      30% { transform: scale(1.04); }
+      100% { transform: scale(1); }
+    }
+    @keyframes wrongShake {
+      0%, 100% { transform: translateX(0); }
+      20% { transform: translateX(-8px); }
+      40% { transform: translateX(8px); }
+      60% { transform: translateX(-6px); }
+      80% { transform: translateX(6px); }
+    }
+
+    .problem {
+      font-family: 'Fredoka One', cursive;
+      font-size: clamp(3rem, 10vw, 5rem);
+      color: var(--dark);
+      line-height: 1.1;
+      margin-bottom: 8px;
+      letter-spacing: 4px;
+    }
+    .problem .operator { color: var(--coral); }
+    .problem .equals { color: var(--lavender); }
+    .problem .blank {
+      display: inline-block;
+      min-width: 80px;
+      border-bottom: 5px solid var(--lavender);
+      color: var(--lavender);
+    }
+
+    .question-emoji {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+      animation: emojiBounce 1s ease-in-out infinite;
+    }
+    @keyframes emojiBounce {
+      0%, 100% { transform: rotate(-5deg); }
+      50% { transform: rotate(5deg); }
+    }
+
+    /* Answer choices */
+    .choices {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-top: 22px;
+      width: 100%;
+    }
+
+    .choice-btn {
+      font-family: 'Fredoka One', cursive;
+      font-size: clamp(1.6rem, 5vw, 2.2rem);
+      padding: 18px 10px;
+      border: none;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: all 0.15s;
+      border-bottom: 5px solid transparent;
+      color: white;
+      position: relative;
+      overflow: hidden;
+    }
+    .choice-btn:nth-child(1) { background: var(--coral); border-color: #D84444; }
+    .choice-btn:nth-child(2) { background: var(--mint); border-color: #2FA89E; }
+    .choice-btn:nth-child(3) { background: var(--peach); border-color: #D0882A; }
+    .choice-btn:nth-child(4) { background: var(--lavender); border-color: #9333EA; }
+
+    .choice-btn:hover:not(:disabled) {
+      transform: translateY(-4px) scale(1.04);
+      filter: brightness(1.08);
+    }
+    .choice-btn:active:not(:disabled) {
+      transform: translateY(2px);
+      border-bottom-width: 2px;
+    }
+    .choice-btn:disabled { cursor: default; opacity: 0.7; }
+    .choice-btn.correct-answer { background: #22C55E !important; border-color: #16A34A !important; animation: bounceUp 0.4s ease; }
+    .choice-btn.wrong-answer { background: #EF4444 !important; border-color: #DC2626 !important; opacity: 0.6; }
+
+    @keyframes bounceUp {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.12) translateY(-6px); }
+      100% { transform: scale(1); }
+    }
+
+    /* Feedback message */
+    .feedback {
+      font-family: 'Fredoka One', cursive;
+      font-size: 1.8rem;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 8px;
+      transition: all 0.3s;
+    }
+    .feedback.show-correct { color: #16A34A; animation: feedbackPop 0.4s ease; }
+    .feedback.show-wrong { color: var(--coral); animation: feedbackPop 0.4s ease; }
+    @keyframes feedbackPop {
+      0% { transform: scale(0.5); opacity: 0; }
+      70% { transform: scale(1.1); }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    /* Progress bar */
+    .progress-wrap {
+      width: 100%;
+      height: 16px;
+      background: rgba(255,255,255,0.5);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, var(--sun), var(--coral));
+      border-radius: 20px;
+      transition: width 0.5s ease;
+      box-shadow: 0 2px 6px rgba(255,100,100,0.4);
+    }
+    .progress-label {
+      font-family: 'Fredoka One', cursive;
+      font-size: 0.95rem;
+      color: white;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+      text-align: center;
+      margin-top: 4px;
+    }
+
+    /* Confetti burst */
+    .confetti-container {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      pointer-events: none;
+      z-index: 100;
+      overflow: hidden;
+    }
+    .confetti-piece {
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      border-radius: 3px;
+      animation: confettiFall linear forwards;
+    }
+    @keyframes confettiFall {
+      0% { transform: translateY(-20px) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+    }
+
+    /* Celebration overlay */
+    .celebration {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+    }
+    .celebration.show { display: flex; }
+    .celebration-box {
+      background: white;
+      border-radius: 32px;
+      padding: 40px 50px;
+      text-align: center;
+      box-shadow: 0 20px 80px rgba(0,0,0,0.3);
+      animation: celebPop 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      max-width: 360px;
+      width: 90%;
+    }
+    @keyframes celebPop {
+      0% { transform: scale(0.3); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    .celeb-emoji { font-size: 5rem; display: block; margin-bottom: 10px; }
+    .celeb-title {
+      font-family: 'Fredoka One', cursive;
+      font-size: 2.4rem;
+      color: var(--dark);
+      margin-bottom: 8px;
+    }
+    .celeb-sub {
+      font-size: 1.1rem;
+      color: #666;
+      margin-bottom: 24px;
+    }
+    .celeb-score {
+      font-family: 'Fredoka One', cursive;
+      font-size: 3rem;
+      color: var(--coral);
+      margin-bottom: 20px;
+    }
+    .play-again-btn {
+      font-family: 'Fredoka One', cursive;
+      font-size: 1.5rem;
+      padding: 16px 40px;
+      background: linear-gradient(135deg, var(--coral), var(--peach));
+      color: white;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      box-shadow: 0 6px 0 #C24040;
+      transition: all 0.2s;
+    }
+    .play-again-btn:hover { transform: translateY(-3px); filter: brightness(1.08); }
+    .play-again-btn:active { transform: translateY(3px); box-shadow: 0 3px 0 #C24040; }
+
+    /* Streak fire */
+    .streak-fire {
+      display: inline-block;
+      animation: fireWiggle 0.5s ease-in-out infinite alternate;
+    }
+    @keyframes fireWiggle {
+      from { transform: rotate(-10deg) scale(0.9); }
+      to { transform: rotate(10deg) scale(1.1); }
+    }
+
+    /* Floating +1 */
+    .float-point {
+      position: fixed;
+      font-family: 'Fredoka One', cursive;
+      font-size: 2.5rem;
+      color: var(--mint);
+      text-shadow: 2px 2px 0 rgba(0,0,0,0.2);
+      pointer-events: none;
+      z-index: 300;
+      animation: floatUp 1s ease forwards;
+    }
+    @keyframes floatUp {
+      0% { opacity: 1; transform: translateY(0) scale(1); }
+      100% { opacity: 0; transform: translateY(-80px) scale(1.5); }
+    }
+
+    /* Responsive */
+    @media (max-width: 480px) {
+      .choices { gap: 10px; }
+      .choice-btn { padding: 14px 8px; }
+      .problem { font-size: 2.8rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Background decorations -->
+  <div class="sun"></div>
+  <div class="cloud cloud-1"></div>
+  <div class="cloud cloud-2"></div>
+  <div class="cloud cloud-3"></div>
+  <div class="stars" id="stars"></div>
+  <div class="confetti-container" id="confettiContainer"></div>
+
+  <!-- Celebration overlay -->
+  <div class="celebration" id="celebrationOverlay">
+    <div class="celebration-box">
+      <span class="celeb-emoji" id="celebEmoji">🎉</span>
+      <div class="celeb-title" id="celebTitle">Amazing!</div>
+      <div class="celeb-sub" id="celebSub">You finished the round!</div>
+      <div class="celeb-score" id="celebScore"></div>
+      <button class="play-again-btn" onclick="playAgain()">Play Again! 🚀</button>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="title">🌟 Math Adventure! 🌟</div>
+
+    <!-- Level selector -->
+    <div class="level-panel">
+      <div class="level-label">Choose your level:</div>
+      <div class="level-buttons">
+        <button class="level-btn l1 selected" id="btnL1" onclick="setLevel(1)">
+          ⭐ Level 1<br><small style="font-family:Nunito;font-size:0.75rem;font-weight:700">Numbers 1–20</small>
+        </button>
+        <button class="level-btn l2" id="btnL2" onclick="setLevel(2)">
+          🚀 Level 2<br><small style="font-family:Nunito;font-size:0.75rem;font-weight:700">Numbers 1–100</small>
+        </button>
+      </div>
+    </div>
+
+    <!-- Scores -->
+    <div class="score-panel">
+      <div class="score-card">
+        <div class="score-label">✅ Correct</div>
+        <div class="score-value" id="scoreCorrect">0</div>
+      </div>
+      <div class="score-card streak">
+        <div class="score-label">🔥 Streak</div>
+        <div class="score-value" id="scoreStreak">0</div>
+      </div>
+      <div class="score-card total">
+        <div class="score-label">❓ Question</div>
+        <div class="score-value" id="scoreQuestion">1/10</div>
+      </div>
+    </div>
+
+    <!-- Progress -->
+    <div style="width:100%">
+      <div class="progress-wrap">
+        <div class="progress-bar" id="progressBar" style="width:0%"></div>
+      </div>
+      <div class="progress-label" id="progressLabel">Question 1 of 10</div>
+    </div>
+
+    <!-- Question card -->
+    <div class="question-card" id="questionCard">
+      <div class="question-emoji" id="questionEmoji">🧮</div>
+      <div class="problem" id="problemDisplay"></div>
+      <div class="choices" id="choicesGrid"></div>
+      <div class="feedback" id="feedbackMsg"></div>
+    </div>
+  </div>
+
+  <script>
+    const QUESTIONS_PER_ROUND = 10;
+    let level = 1;
+    let score = 0;
+    let streak = 0;
+    let questionNum = 0;
+    let currentAnswer = 0;
+    let answering = false;
+
+    const positiveMessages = [
+      ['🌟 Super!', '✨ Brilliant!', '🎉 Amazing!', '💪 Great job!', '🚀 Awesome!', '⭐ Perfect!', '🎯 Spot on!', '🏆 Winner!'],
+      ['🌈', '⭐', '🎊', '✨', '💫', '🎯', '🏅', '🚀']
+    ];
+    const negativeMessages = [
+      "Oops! Try again! 💪",
+      "Not quite — keep going! 🌟",
+      "Almost! You've got this! ⭐",
+      "Don't give up! 🚀"
+    ];
+    const questionEmojis = ['🐱', '🐶', '🦊', '🐸', '🦁', '🐨', '🐼', '🦋', '🐬', '🦄', '🐙', '🦓', '🌸', '🍎', '🍕', '🎈', '🎸', '🌈'];
+
+    function randInt(min, max) {
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    function shuffle(arr) {
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    }
+
+    function generateQuestion() {
+      const maxNum = level === 1 ? 20 : 100;
+      const isAddition = Math.random() > 0.4;
+      let a, b, answer, opSymbol;
+
+      if (isAddition) {
+        a = randInt(1, maxNum - 1);
+        b = randInt(1, maxNum - a);
+        answer = a + b;
+        opSymbol = '+';
+      } else {
+        a = randInt(2, maxNum);
+        b = randInt(1, a - 1);
+        answer = a - b;
+        opSymbol = '−';
+      }
+
+      return { a, b, answer, opSymbol };
+    }
+
+    function generateChoices(correctAnswer) {
+      const choices = new Set([correctAnswer]);
+      const maxNum = level === 1 ? 20 : 100;
+      while (choices.size < 4) {
+        let distractor;
+        const delta = randInt(1, level === 1 ? 5 : 12);
+        const sign = Math.random() > 0.5 ? 1 : -1;
+        distractor = correctAnswer + sign * delta;
+        if (distractor >= 0 && distractor <= maxNum + 10 && distractor !== correctAnswer) {
+          choices.add(distractor);
+        }
+      }
+      return shuffle([...choices]);
+    }
+
+    function setLevel(l) {
+      level = l;
+      document.getElementById('btnL1').classList.toggle('selected', l === 1);
+      document.getElementById('btnL2').classList.toggle('selected', l === 2);
+      startGame();
+    }
+
+    function startGame() {
+      score = 0;
+      streak = 0;
+      questionNum = 0;
+      updateScoreDisplay();
+      nextQuestion();
+    }
+
+    function nextQuestion() {
+      if (questionNum >= QUESTIONS_PER_ROUND) {
+        showCelebration();
+        return;
+      }
+      questionNum++;
+      answering = false;
+
+      const q = generateQuestion();
+      currentAnswer = q.answer;
+
+      // Update emoji
+      const emoji = questionEmojis[Math.floor(Math.random() * questionEmojis.length)];
+      document.getElementById('questionEmoji').textContent = emoji;
+
+      // Display problem
+      document.getElementById('problemDisplay').innerHTML =
+        `${q.a} <span class="operator">${q.opSymbol}</span> ${q.b} <span class="equals">=</span> <span class="blank">?</span>`;
+
+      // Generate and display choices
+      const choices = generateChoices(q.answer);
+      const grid = document.getElementById('choicesGrid');
+      grid.innerHTML = '';
+      choices.forEach(choice => {
+        const btn = document.createElement('button');
+        btn.className = 'choice-btn';
+        btn.textContent = choice;
+        btn.onclick = () => handleAnswer(btn, choice);
+        grid.appendChild(btn);
+      });
+
+      // Clear feedback
+      const fb = document.getElementById('feedbackMsg');
+      fb.textContent = '';
+      fb.className = 'feedback';
+
+      // Reset card state
+      const card = document.getElementById('questionCard');
+      card.className = 'question-card';
+
+      // Update progress
+      updateProgress();
+    }
+
+    function handleAnswer(btn, chosen) {
+      if (answering) return;
+      answering = true;
+
+      const isCorrect = chosen === currentAnswer;
+      const card = document.getElementById('questionCard');
+      const fb = document.getElementById('feedbackMsg');
+      const allBtns = document.querySelectorAll('.choice-btn');
+
+      // Disable all buttons
+      allBtns.forEach(b => b.disabled = true);
+
+      if (isCorrect) {
+        score++;
+        streak++;
+        btn.classList.add('correct-answer');
+        card.className = 'question-card correct';
+        const msgs = positiveMessages[0];
+        const icons = positiveMessages[1];
+        const msg = msgs[Math.floor(Math.random() * msgs.length)];
+        const icon = icons[Math.floor(Math.random() * icons.length)];
+        fb.textContent = msg;
+        fb.className = 'feedback show-correct';
+        spawnFloatPoint(btn);
+        if (streak >= 3) launchConfetti(4);
+        else launchConfetti(2);
+      } else {
+        streak = 0;
+        card.className = 'question-card wrong';
+        const msg = negativeMessages[Math.floor(Math.random() * negativeMessages.length)];
+        fb.textContent = msg;
+        fb.className = 'feedback show-wrong';
+        // Highlight correct answer
+        allBtns.forEach(b => {
+          if (parseInt(b.textContent) === currentAnswer) b.classList.add('correct-answer');
+          else if (b === btn) b.classList.add('wrong-answer');
+        });
+      }
+
+      updateScoreDisplay();
+
+      setTimeout(nextQuestion, isCorrect ? 900 : 1400);
+    }
+
+    function updateScoreDisplay() {
+      document.getElementById('scoreCorrect').textContent = score;
+      const streakEl = document.getElementById('scoreStreak');
+      streakEl.innerHTML = streak >= 3
+        ? `<span class="streak-fire">🔥</span>${streak}`
+        : streak;
+    }
+
+    function updateProgress() {
+      const pct = ((questionNum - 1) / QUESTIONS_PER_ROUND) * 100;
+      document.getElementById('progressBar').style.width = pct + '%';
+      document.getElementById('progressLabel').textContent = `Question ${questionNum} of ${QUESTIONS_PER_ROUND}`;
+      document.getElementById('scoreQuestion').textContent = `${questionNum}/${QUESTIONS_PER_ROUND}`;
+    }
+
+    function launchConfetti(count) {
+      const container = document.getElementById('confettiContainer');
+      const colors = ['#FF6B6B', '#FFD700', '#4ECDC4', '#C084FC', '#FFB347', '#22C55E', '#60A5FA'];
+      for (let i = 0; i < count * 5; i++) {
+        const piece = document.createElement('div');
+        piece.className = 'confetti-piece';
+        piece.style.left = Math.random() * 100 + 'vw';
+        piece.style.top = '-20px';
+        piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+        piece.style.width = (8 + Math.random() * 10) + 'px';
+        piece.style.height = (8 + Math.random() * 10) + 'px';
+        piece.style.animationDuration = (1 + Math.random() * 2) + 's';
+        piece.style.animationDelay = (Math.random() * 0.5) + 's';
+        piece.style.borderRadius = Math.random() > 0.5 ? '50%' : '3px';
+        container.appendChild(piece);
+        setTimeout(() => piece.remove(), 3000);
+      }
+    }
+
+    function spawnFloatPoint(btn) {
+      const rect = btn.getBoundingClientRect();
+      const el = document.createElement('div');
+      el.className = 'float-point';
+      el.textContent = '+1 ⭐';
+      el.style.left = (rect.left + rect.width / 2 - 30) + 'px';
+      el.style.top = (rect.top - 10) + 'px';
+      document.body.appendChild(el);
+      setTimeout(() => el.remove(), 1000);
+    }
+
+    function showCelebration() {
+      const pct = Math.round((score / QUESTIONS_PER_ROUND) * 100);
+      let emoji, title, sub;
+      if (pct === 100) { emoji = '🏆'; title = 'PERFECT SCORE!'; sub = 'You got every single one right!'; }
+      else if (pct >= 80) { emoji = '🌟'; title = 'Super Star!'; sub = 'Outstanding work!'; }
+      else if (pct >= 60) { emoji = '😊'; title = 'Great Job!'; sub = 'Keep practicing — you\'re doing amazing!'; }
+      else { emoji = '💪'; title = 'Keep Going!'; sub = 'Every mistake helps you learn!'; }
+
+      document.getElementById('celebEmoji').textContent = emoji;
+      document.getElementById('celebTitle').textContent = title;
+      document.getElementById('celebSub').textContent = sub;
+      document.getElementById('celebScore').textContent = `${score} / ${QUESTIONS_PER_ROUND}`;
+      document.getElementById('celebrationOverlay').classList.add('show');
+      launchConfetti(10);
+    }
+
+    function playAgain() {
+      document.getElementById('celebrationOverlay').classList.remove('show');
+      startGame();
+    }
+
+    // Seed floating stars
+    function seedStars() {
+      const container = document.getElementById('stars');
+      const emojis = ['⭐', '✨', '💫', '🌟'];
+      for (let i = 0; i < 8; i++) {
+        const star = document.createElement('div');
+        star.className = 'star';
+        star.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+        star.style.left = Math.random() * 100 + 'vw';
+        star.style.top = Math.random() * 55 + 'vh';
+        star.style.animationDelay = (Math.random() * 2) + 's';
+        star.style.animationDuration = (1.5 + Math.random() * 2) + 's';
+        container.appendChild(star);
+      }
+    }
+
+    seedStars();
+    startGame();
+  </script>
+</body>
+</html>
