@@ -19,13 +19,6 @@ A fun, colorful arithmetic web game for first graders — no installation needed
 3. Tap or click the correct answer
 4. Finish all 10 questions to see your score!
 
-## Hosting on GitHub Pages
-
-After pushing to GitHub:
-1. Go to your repo → **Settings** → **Pages**
-2. Set source to `main` branch, `/ (root)` folder
-3. Your game will be live at `https://YOUR_USERNAME.github.io/math-adventure/`
-
 ## Tech
 
 Pure HTML, CSS, and vanilla JavaScript — no dependencies, no build step.
