@@ -1,0 +1,38 @@
+level,type,template,operation,Number1,Number2,Name
+1,equation,{Number1} + {Number2} =,Number1 + Number2,Random(1;9),Random(1;10-Number1),
+1,equation,{Number1} - {Number2} =,Number1 - Number2,Random(2;10),Random(1;Number1-1),
+1,word,"{Name} has {Number1} apples and finds {Number2} more. How many apples does {Name} have now?",Number1 + Number2,Random(1;9),Random(1;10-Number1),RandomName
+1,word,"There are {Number1} birds in a tree. {Number2} more birds fly in. How many birds are there now?",Number1 + Number2,Random(1;9),Random(1;10-Number1),RandomName
+1,word,"{Name} has {Number1} stickers. A friend gives {Name} {Number2} more. How many stickers does {Name} have?",Number1 + Number2,Random(1;9),Random(1;10-Number1),RandomName
+1,word,"{Name} sees {Number1} butterflies. Then {Number2} more butterflies come. How many butterflies are there?",Number1 + Number2,Random(1;9),Random(1;10-Number1),RandomName
+1,word,"There are {Number1} cookies on a plate. Mom puts {Number2} more cookies. How many cookies are on the plate?",Number1 + Number2,Random(1;9),Random(1;10-Number1),RandomName
+1,word,"{Name} picks {Number1} flowers. Then {Name} picks {Number2} more. How many flowers does {Name} have?",Number1 + Number2,Random(1;9),Random(1;10-Number1),RandomName
+1,word,"{Name} has {Number1} crayons in a box. {Name} gets {Number2} new ones. How many crayons does {Name} have now?",Number1 + Number2,Random(1;9),Random(1;10-Number1),RandomName
+1,word,"There are {Number1} ducks in the pond. {Number2} more ducks jump in. How many ducks are in the pond?",Number1 + Number2,Random(1;9),Random(1;10-Number1),RandomName
+1,word,"{Name} has {Number1} apples and eats {Number2}. How many apples are left?",Number1 - Number2,Random(2;10),Random(1;Number1-1),RandomName
+1,word,"There are {Number1} fish in a pond. {Number2} swim away. How many fish are left?",Number1 - Number2,Random(2;10),Random(1;Number1-1),RandomName
+1,word,"{Name} has {Number1} balloons. {Number2} balloons pop. How many balloons are left?",Number1 - Number2,Random(2;10),Random(1;Number1-1),RandomName
+1,word,"{Name} has {Number1} candies and gives {Number2} to a friend. How many candies does {Name} have now?",Number1 - Number2,Random(2;10),Random(1;Number1-1),RandomName
+1,word,"There are {Number1} dogs in the park. {Number2} dogs go home. How many dogs are still in the park?",Number1 - Number2,Random(2;10),Random(1;Number1-1),RandomName
+1,word,"{Name} bakes {Number1} cupcakes. The family eats {Number2}. How many cupcakes are left?",Number1 - Number2,Random(2;10),Random(1;Number1-1),RandomName
+1,word,"{Name} has {Number1} stars on a chart. {Number2} stars fall off. How many stars are left?",Number1 - Number2,Random(2;10),Random(1;Number1-1),RandomName
+1,word,"There are {Number1} books on the shelf. {Name} takes {Number2} books. How many books are on the shelf now?",Number1 - Number2,Random(2;10),Random(1;Number1-1),RandomName
+2,equation,{Number1} + {Number2} =,Number1 + Number2,Random(1;19),Random(1;20-Number1),
+2,equation,{Number1} - {Number2} =,Number1 - Number2,Random(2;20),Random(1;Number1-1),
+2,equation,{Number1} x {Number2} =,Number1 * Number2,Random(1;10),RandomChoice(2;3),
+3,word,"{Name} εχει {Number1} Μήλα και βρηκε αλλα {Number2} μήλα. Πόσα μηλα εχει η {Name}?",Number1 + Number2,Random(1;9),Random(1;20-Number1),RandomName
+3,word,"There are {Number1} birds in a tree. {Number2} more birds fly in. How many birds are there now?",Number1 + Number2,Random(1;9),Random(1;20-Number1),RandomName
+3,word,"{Name} has {Number1} stickers. A friend gives {Name} {Number2} more. How many stickers does {Name} have?",Number1 + Number2,Random(1;9),Random(1;20-Number1),RandomName
+3,word,"{Name} sees {Number1} butterflies. Then {Number2} more butterflies come. How many butterflies are there?",Number1 + Number2,Random(1;9),Random(1;20-Number1),RandomName
+3,word,"There are {Number1} cookies on a plate. Mom puts {Number2} more cookies. How many cookies are on the plate?",Number1 + Number2,Random(1;9),Random(1;20-Number1),RandomName
+3,word,"{Name} picks {Number1} flowers. Then {Name} picks {Number2} more. How many flowers does {Name} have?",Number1 + Number2,Random(1;9),Random(1;20-Number1),RandomName
+3,word,"{Name} has {Number1} crayons in a box. {Name} gets {Number2} new ones. How many crayons does {Name} have now?",Number1 + Number2,Random(1;9),Random(1;20-Number1),RandomName
+3,word,"There are {Number1} ducks in the pond. {Number2} more ducks jump in. How many ducks are in the pond?",Number1 + Number2,Random(1;9),Random(1;20-Number1),RandomName
+3,word,"{Name} has {Number1} apples and eats {Number2}. How many apples are left?",Number1 - Number2,Random(2;20),Random(1;Number1-1),RandomName
+3,word,"There are {Number1} fish in a pond. {Number2} swim away. How many fish are left?",Number1 - Number2,Random(2;20),Random(1;Number1-1),RandomName
+3,word,"{Name} has {Number1} balloons. {Number2} balloons pop. How many balloons are left?",Number1 - Number2,Random(2;20),Random(1;Number1-1),RandomName
+3,word,"{Name} has {Number1} candies and gives {Number2} to a friend. How many candies does {Name} have now?",Number1 - Number2,Random(2;20),Random(1;Number1-1),RandomName
+3,word,"There are {Number1} dogs in the park. {Number2} dogs go home. How many dogs are still in the park?",Number1 - Number2,Random(2;20),Random(1;Number1-1),RandomName
+3,word,"{Name} bakes {Number1} cupcakes. The family eats {Number2}. How many cupcakes are left?",Number1 - Number2,Random(2;20),Random(1;Number1-1),RandomName
+3,word,"{Name} has {Number1} stars on a chart. {Number2} stars fall off. How many stars are left?",Number1 - Number2,Random(2;20),Random(1;Number1-1),RandomName
+3,word,"There are {Number1} books on the shelf. {Name} takes {Number2} books. How many books are on the shelf now?",Number1 - Number2,Random(2;20),Random(1;Number1-1),RandomName
